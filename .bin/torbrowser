@@ -1,0 +1,5 @@
+#!/bin/sh
+
+#sudo xhost si:localuser:ff
+#sudo -u ff firefox
+xhost +local: && sudo -u torbrowser /home/torbrowser/tor-browser_en-US/Browser/start-tor-browser

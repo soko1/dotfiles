@@ -1,0 +1,88 @@
+# Gmail settings
+source "gpg -d ~/.mutt/accounts.gpg |"
+source "~/.mutt/sjl.theme"
+
+set mailcap_path	= ~/.mutt/mailcap
+set config_charset=utf-8
+set ssl_starttls=yes
+set ssl_force_tls=yes
+set imap_keepalive = 300
+unset imap_passive
+set mail_check=60
+set timeout=10
+set folder = "imaps://imap.gmail.com:993"
+set spoolfile = "+INBOX"
+set postponed="+[Gmail]/Drafts"
+set header_cache=~/.mutt/cache/headers
+set message_cachedir=~/.mutt/cache/bodies
+set certificate_file=~/.mutt/certificates
+set move = no
+set sort = 'threads'
+#set sort_aux = 'last-date-received'
+set sort_aux = reverse-last-date-received  # like gmail
+set sort_re                                # thread based on regex
+set pager_index_lines=10
+set imap_check_subscribed
+set editor="emacs -nw --no-init-file --load ~/.emacs-mail +7:0"
+set date_format="%d-%m-%y %T"
+set index_format="%2C | %Z [%d] %-30.30F (%-4.4c) %s"
+set status_on_top = yes
+set status_format = "Folder: %f : %r%n new (%m messages)%?d? (%d to delete)?%?t? (%t tagged)? %>-%?p?( %p postponed )? : "
+
+#folder-hook . 'uncolor index "~b \"Hi Joe\" ~R !~T !~F !~p !~P"'
+#folder-hook ""!"" 'color index brightyellow black "~b \"Hi Joe\" ~N !~T !~F !~p !~P"'
+
+set pager_context     = 5
+set pager_stop
+set menu_scroll
+set smart_wrap
+set tilde
+unset markers
+unset move           # gmail does that
+set delete           # don't ask, just do
+unset confirmappend  # don't ask, just do!
+set quit             # don't ask, just do!!
+unset mark_old       # read/new is good enough for me
+
+# composing
+set fcc_attach
+unset mime_forward
+set forward_format = "Fwd: %s"
+set include
+set forward_quote
+
+### HOTKEYS
+macro index <f1> '<sync-mailbox><enter-command>source "gpg -d ~/.mutt/accounts.gpg |"<enter><change-folder>!<enter>'
+macro index <f2> '<sync-mailbox><enter-command>source "gpg -d ~/.mutt/accounts2.gpg |"<enter><change-folder>!<enter>'
+macro index <f3> '<sync-mailbox><enter-command>source "gpg -d ~/.mutt/accounts3.gpg |"<enter><change-folder>!<enter>'
+macro index <f4> '<sync-mailbox><enter-command>source "gpg -d ~/.mutt/accounts4.gpg |"<enter><change-folder>!<enter>'
+
+macro attach 'V' "<pipe-entry>cat >~/.cache/mail.html && luakit ~/.cache/mail.html && shred ~/.cache/mail.html<enter>"
+macro index 'I'  "<change-folder> =INBOX<enter>"  "go to INBOX folder"
+
+#macro index D \
+#  "<save-message>+[Gmail]/Trash<enter>" \
+#  "move message to the trash"
+
+macro index S \
+    "<save-message>+[Gmail]/Spam<enter>" \
+    "mark message as spam"
+
+# HTML mails
+auto_view text/html
+
+### HEADERS
+
+## Extra info.
+my_hdr X-Info: Keep It Simple, Stupid.
+## OS Info.
+my_hdr X-Operating-System: OpenBSD
+## This header only appears to MS Outlook users
+my_hdr X-Message-Flag: WARNING!! Outlook sucks
+## Custom Mail-User-Agent ID.
+my_hdr User-Agent: Every email client sucks, this one just sucks less.
+
+ignore *                               # ignore all headers
+unignore from: to: cc: date: subject:  # show only these
+unhdr_order *                          # some distros order things
+hdr_order from: to: cc: date: subject: # and in this order

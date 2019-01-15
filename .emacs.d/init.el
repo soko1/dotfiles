@@ -955,16 +955,6 @@
                ("s" . smbclient)
                ("t" . traceroute)))
 
-(use-package docker
-  :config
-  (docker-global-mode))
-
-;; not sure if these two should be here
-(use-package dockerfile-mode
-  :mode "Dockerfile\\'")
-
-(use-package docker-compose-mode)
-
 (use-package emamux)
 
 (use-package reverse-im

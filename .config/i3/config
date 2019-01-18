@@ -23,6 +23,7 @@ bindsym $mod+Escape exec ~/.bin/lock && systemctl suspend
 bindsym $mod+q kill
 #bindsym $mod+d exec dmenu_run
 bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
+bindsym $mod+Shift+E exec emacsclient -c
 #bindsym --release $mod+Print exec scrot -s -e 'mv $f ~/Pictures/screens/'
 # alternatively, you can use the cursor keys:
 bindsym $mod+Left focus left

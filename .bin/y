@@ -1,0 +1,3 @@
+#!/bin/sh
+
+~/.local/bin/youtube-dl -c -i -x --audio-format mp3 --yes-playlist $1

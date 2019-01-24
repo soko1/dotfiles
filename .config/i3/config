@@ -18,6 +18,7 @@ exec "~/.bin/run.sh"
 
 
 bindsym $mod+Return exec pgrep rxvt && ~/.bin/tmux_newtab || urxvt
+bindsym $mod+Shift+Return exec urxvt
 bindsym $mod+x exec ~/.bin/lock
 bindsym $mod+Escape exec ~/.bin/lock && systemctl suspend
 bindsym $mod+q kill

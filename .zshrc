@@ -19,6 +19,7 @@ export EDITOR="vim"
 export PAGER="most"
 export PATH="$PATH:$HOME/.bin:/.local/bin"
 
+alias y='~/.local/bin/youtube-dl -c -i -x --audio-format mp3 --yes-playlist $1'
 alias pipupgradeall='pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip3 install --user -U'
 alias flatpak='flatpak --user '
 alias scanlocal='sudo nmap -sP 192.168.88.1-254'

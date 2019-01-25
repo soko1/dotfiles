@@ -21,10 +21,10 @@ export PATH="$PATH:$HOME/.bin:/.local/bin"
 
 alias y='~/.local/bin/youtube-dl -c -i -x --audio-format mp3 --yes-playlist $1'
 alias pipupgradeall='pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip3 install --user -U'
-alias flatpak='flatpak --user '
-alias fu='flatpak --user update'
-alias fi='flatpak --user install'
-alias fr='flatpak --user remove'
+alias flatpak='flatpak --user'
+alias fpu='flatpak --user update'
+alias fpi='flatpak --user install'
+alias fpr='flatpak --user remove'
 alias scanlocal='sudo nmap -sP 192.168.88.1-254'
 alias xp='xprop | grep "WM_WINDOW_ROLE\|WM_CLASS" && echo "WM_CLASS(STRING) = \"NAME\", \"CLASS\""'
 alias fd_room="ssh -L 5001:localhost:5001 myroom"

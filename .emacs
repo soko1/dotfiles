@@ -49,12 +49,16 @@
      ("melpa" . "https://melpa.org/packages/")
      ("org" . "https://orgmode.org/elpa/")
      ("melpa" . "https://melpa.org/packages/")
+     ("org" . "https://orgmode.org/elpa/")
+     ("melpa" . "https://melpa.org/packages/")
+     ("org" . "https://orgmode.org/elpa/")
+     ("melpa" . "https://melpa.org/packages/")
      ("org" . "https://orgmode.org/elpa/"))))
  '(package-enable-at-startup nil)
  '(package-selected-packages
    (quote
     (lor-theme use-package-secrets alert so-long rainbow-mode rainbow-identifiers rainbow-delimiters page-break-lines hl-todo highlight-escape-sequences highlight-numbers counsel-web request quelpa-use-package quelpa helm-make ivy-rich counsel-world-clock counsel ivy-xref amx fancy-battery flyspell-correct-ivy eshell-fringe-status eshell-toggle eshell-prompt-extras esh-autosuggest esh-help sudo-edit use-package)))
- '(quelpa-update-melpa-p nil)
+ '(quelpa-update-melpa-p nil t)
  '(rainbow-identifiers-choose-face-function (quote rainbow-identifiers-cie-l*a*b*-choose-face))
  '(rainbow-identifiers-cie-l*a*b*-lightness 80)
  '(rainbow-identifiers-cie-l*a*b*-saturation 50)
@@ -74,6 +78,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(default ((t (:inherit nil :stipple nil :background "#2e3436" :foreground "#f8f8f8" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 150 :width normal :foundry "nil" :family "Menlo"))))
  '(hl-todo ((t (:inherit hl-todo :italic t))))
  '(ivy-current-match ((t (:inherit (quote hl-line))))))
 (put 'dired-find-alternate-file 'disabled nil)

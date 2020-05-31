@@ -1,6 +1,5 @@
 
-;; Added by Package.el.  This must come before configurations of
-;; installed packages.  Don't delete this line.  If you don't want it,
+;; installed packages. Don't delete this line.  If you don't want it,
 ;; just comment it out by adding a semicolon to the start of the line.
 ;; You may delete these explanatory comments.
 (package-initialize)
@@ -53,11 +52,15 @@
      ("melpa" . "https://melpa.org/packages/")
      ("org" . "https://orgmode.org/elpa/")
      ("melpa" . "https://melpa.org/packages/")
+     ("org" . "https://orgmode.org/elpa/")
+     ("melpa" . "https://melpa.org/packages/")
+     ("org" . "https://orgmode.org/elpa/")
+     ("melpa" . "https://melpa.org/packages/")
      ("org" . "https://orgmode.org/elpa/"))))
  '(package-enable-at-startup nil)
  '(package-selected-packages
    (quote
-    (lor-theme use-package-secrets alert so-long rainbow-mode rainbow-identifiers rainbow-delimiters page-break-lines hl-todo highlight-escape-sequences highlight-numbers counsel-web request quelpa-use-package quelpa helm-make ivy-rich counsel-world-clock counsel ivy-xref amx fancy-battery flyspell-correct-ivy eshell-fringe-status eshell-toggle eshell-prompt-extras esh-autosuggest esh-help sudo-edit use-package)))
+    (avy-zap avy markdown-mode xahk-mode xah-fly-keys paradox lor-theme use-package-secrets alert so-long rainbow-mode rainbow-identifiers rainbow-delimiters page-break-lines hl-todo highlight-escape-sequences highlight-numbers counsel-web request quelpa-use-package quelpa helm-make ivy-rich counsel-world-clock counsel ivy-xref amx fancy-battery flyspell-correct-ivy eshell-fringe-status eshell-toggle eshell-prompt-extras esh-autosuggest esh-help sudo-edit use-package)))
  '(quelpa-update-melpa-p nil t)
  '(rainbow-identifiers-choose-face-function (quote rainbow-identifiers-cie-l*a*b*-choose-face))
  '(rainbow-identifiers-cie-l*a*b*-lightness 80)
@@ -100,6 +103,11 @@
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
+
+(use-package delsel
+  :bind
+  (:map mode-specific-map
+        ("C-g" . minibuffer-keyboard-quit)))
 
 
 (use-package quelpa
@@ -351,4 +359,32 @@
   :quelpa
   (lor-theme :repo "a13/lor-theme" :fetcher github :version original))
 
+(global-unset-key (kbd "C-x ."))
+(global-set-key (kbd "C-x .") 'next-buffer)
+(global-set-key (kbd "C-x ,") 'previous-buffer)
 
+(use-package so-long
+  :quelpa (so-long :url "https://raw.githubusercontent.com/emacs-mirror/emacs/master/lisp/so-long.el" :fetcher url)
+  :config (global-so-long-mode))
+
+(use-package lor-theme
+  :config
+  (load-theme 'lor t)
+  :quelpa
+  (lor-theme :repo "a13/lor-theme" :fetcher github :version original))
+
+(global-unset-key (kbd "C-x ."))
+(global-unset-key (kbd "M-s")
+(global-set-key (kbd "C-x .") 'next-buffer)
+(global-set-key (kbd "C-x ,") 'previous-buffer)
+
+(use-package avy
+  :ensure t
+  :bind
+  (("C-:" .   avy-goto-char-timer)
+   ("C-." .   avy-goto-word-1)))
+
+(use-package avy-zap
+  :ensure t
+  :bind
+  ([remap zap-to-char] . avy-zap-to-char))

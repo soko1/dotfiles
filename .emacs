@@ -5,9 +5,12 @@
                         `(,@package-archives
                           ("melpa" . "https://melpa.org/packages/")
                           ("org" . "https://orgmode.org/elpa/")
+                           ("gnu" . "https://elpa.gnu.org/packages/")
                           ))
 (customize-set-variable 'package-enable-at-startup nil)
 (package-initialize)
+
+(defalias 'yes-or-no-p 'y-or-n-p) 
 
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
@@ -280,6 +283,7 @@
 (global-unset-key (kbd "C-x ."))
 (global-set-key (kbd "C-x .") 'next-buffer)
 (global-set-key (kbd "C-x ,") 'previous-buffer)
+(setq mac-command-modifier 'meta)
 
 (use-package avy
   :ensure t
@@ -292,3 +296,22 @@
   :bind
   ([remap zap-to-char] . avy-zap-to-char))
 
+(defun my/zoom-in ()
+  "Increase font size by 10 points"
+  (interactive)
+  (set-face-attribute 'default nil
+                      :height
+                      (+ (face-attribute 'default :height)
+                         10)))
+
+(defun my/zoom-out ()
+  "Decrease font size by 10 points"
+  (interactive)
+  (set-face-attribute 'default nil
+                      :height
+                      (- (face-attribute 'default :height)
+                         10)))
+
+;; change font size, interactively
+(global-set-key (kbd "C-+") 'my/zoom-in)
+(global-set-key (kbd "C-_") 'my/zoom-out)

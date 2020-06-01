@@ -1,5 +1,22 @@
 (package-initialize)
 
+(defun my/zoom-in ()
+  "Increase font size by 10 points"
+  (interactive)
+  (set-face-attribute 'default nil
+                      :height
+                      (+ (face-attribute 'default :height)
+                         10)))
+
+(defun my/zoom-out ()
+  "Decrease font size by 10 points"
+  (interactive)
+  (set-face-attribute 'default nil
+                      :height
+                      (- (face-attribute 'default :height)
+                         10)))
+
+
 (require 'package)
 (customize-set-variable 'package-archives
                         `(,@package-archives
@@ -280,9 +297,16 @@
   :quelpa
   (lor-theme :repo "a13/lor-theme" :fetcher github :version original))
 
+(setq default-frame-alist '((font . "Menlo-14")))
+
+(global-unset-key (kbd "C-h"))
+(global-set-key (kbd "C-h") 'delete-backward-char)
 (global-unset-key (kbd "C-x ."))
 (global-set-key (kbd "C-x .") 'next-buffer)
 (global-set-key (kbd "C-x ,") 'previous-buffer)
+;; change font size, interactively
+(global-set-key (kbd "C-+") 'my/zoom-in)
+(global-set-key (kbd "C-_") 'my/zoom-out)
 (setq mac-command-modifier 'meta)
 
 (use-package avy
@@ -296,22 +320,3 @@
   :bind
   ([remap zap-to-char] . avy-zap-to-char))
 
-(defun my/zoom-in ()
-  "Increase font size by 10 points"
-  (interactive)
-  (set-face-attribute 'default nil
-                      :height
-                      (+ (face-attribute 'default :height)
-                         10)))
-
-(defun my/zoom-out ()
-  "Decrease font size by 10 points"
-  (interactive)
-  (set-face-attribute 'default nil
-                      :height
-                      (- (face-attribute 'default :height)
-                         10)))
-
-;; change font size, interactively
-(global-set-key (kbd "C-+") 'my/zoom-in)
-(global-set-key (kbd "C-_") 'my/zoom-out)

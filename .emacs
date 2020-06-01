@@ -1,74 +1,4 @@
-
-;; installed packages. Don't delete this line.  If you don't want it,
-;; just comment it out by adding a semicolon to the start of the line.
-;; You may delete these explanatory comments.
 (package-initialize)
-
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(alert-default-style (quote libnotify) t)
- '(ansi-color-faces-vector
-   [default default default italic underline success warning error])
- '(ansi-color-names-vector
-   ["#242424" "#e5786d" "#95e454" "#cae682" "#8ac6f2" "#333366" "#ccaa8f" "#f6f3e8"])
- '(counsel-grep-base-command
-   "rg -i -M 120 --no-heading --line-number --color never %s %s")
- '(counsel-search-engines-alist
-   (quote
-    ((google "http://suggestqueries.google.com/complete/search" "https://www.google.com/search?q=" counsel--search-request-data-google)
-     (ddg "https://duckduckgo.com/ac/" "https://duckduckgo.com/html/?q=" counsel--search-request-data-ddg))))
- '(cursor-type (quote bar))
- '(custom-enabled-themes (quote (tsdh-dark)))
- '(debug-on-quit nil)
- '(default-frame-alist (quote ((tool-bar-lines 0) (vertical-scroll-bars))))
- '(display-time-24hr-format t)
- '(display-time-default-load-average nil)
- '(display-time-mode t)
- '(enable-recursive-minibuffers t)
- '(eshell-review-quick-commands nil t)
- '(eshell-smart-space-goes-to-end t t)
- '(eshell-where-to-jump (quote begin) t)
- '(helm-make-completion-method (quote ivy) t)
- '(indent-tabs-mode nil)
- '(inhibit-startup-screen t)
- '(initial-frame-alist (quote ((vertical-scroll-bars))))
- '(ivy-count-format "%d/%d ")
- '(ivy-use-selectable-prompt t)
- '(mouse-wheel-progressive-speed nil)
- '(mouse-wheel-scroll-amount (quote (1 ((shift) . 5) ((control)))))
- '(ns-command-modifier (quote meta))
- '(package-enable-at-startup nil)
- '(package-selected-packages
-   (quote
-    (avy-zap avy markdown-mode xahk-mode xah-fly-keys paradox lor-theme use-package-secrets alert so-long rainbow-mode rainbow-identifiers rainbow-delimiters page-break-lines hl-todo highlight-escape-sequences highlight-numbers counsel-web request quelpa-use-package quelpa helm-make ivy-rich counsel-world-clock counsel ivy-xref amx fancy-battery flyspell-correct-ivy eshell-fringe-status eshell-toggle eshell-prompt-extras esh-autosuggest esh-help sudo-edit use-package)))
- '(quelpa-update-melpa-p nil t)
- '(rainbow-identifiers-choose-face-function (quote rainbow-identifiers-cie-l*a*b*-choose-face))
- '(rainbow-identifiers-cie-l*a*b*-lightness 80)
- '(rainbow-identifiers-cie-l*a*b*-saturation 50)
- '(scroll-step 1)
- '(tab-width 4)
- '(tool-bar-mode nil)
- '(tooltip-mode nil)
- '(tramp-backup-directory-alist nil)
- '(tramp-default-method "ssh")
- '(tramp-default-proxies-alist nil)
- '(use-dialog-box nil)
- '(use-package-secrets-directories (quote ("~/.emacs.d/secrets")))
- '(x-gtk-use-system-tooltips nil t)
- '(xref-show-xrefs-function (quote ivy-xref-show-xrefs) t))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(default ((t (:inherit nil :stipple nil :background "#2e3436" :foreground "#f8f8f8" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 150 :width normal :foundry "nil" :family "Menlo"))))
- '(hl-todo ((t (:inherit hl-todo :italic t))))
- '(ivy-current-match ((t (:inherit (quote hl-line))))))
-(put 'dired-find-alternate-file 'disabled nil)
-
 
 (require 'package)
 (customize-set-variable 'package-archives
@@ -254,12 +184,24 @@
   :init
   (counsel-mode))
 
-(use-package swiper :ensure t)
+;; counsel-M-x can use this one
+(use-package amx :ensure t :defer t)
 
-(use-package counsel-web
-  :defer t
-  :quelpa
-  (counsel-web :repo "mnewt/counsel-web" :fetcher github))
+(use-package ivy
+  :ensure t
+  :custom
+  ;; (ivy-re-builders-alist '((t . ivy--regex-fuzzy)))
+  (ivy-count-format "%d/%d " "Show anzu-like counter")
+  (ivy-use-selectable-prompt t "Make the prompt line selectable")
+  :custom-face
+  (ivy-current-match ((t (:inherit 'hl-line))))
+  :bind
+  (:map mode-specific-map
+        ("C-r" . ivy-resume))
+  :config
+  (ivy-mode t))
+
+(use-package swiper :ensure t)
 
 (use-package counsel-world-clock
   :ensure t
@@ -316,10 +258,7 @@
 (use-package rainbow-identifiers
   :ensure t
   :custom
-  (rainbow-identifiers-cie-l*a*b*-lightness 80)
-  (rainbow-identifiers-cie-l*a*b*-saturation 50)
-  (rainbow-identifiers-choose-face-function
-   #'rainbow-identifiers-cie-l*a*b*-choose-face)
+  (rainbow-w-identifiers-cie-l*a*b*-choose-face)
   :hook
   (emacs-lisp-mode . rainbow-identifiers-mode) ; actually, turn it off
   (prog-mode . rainbow-identifiers-mode))
@@ -352,3 +291,4 @@
   :ensure t
   :bind
   ([remap zap-to-char] . avy-zap-to-char))
+

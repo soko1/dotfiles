@@ -1,0 +1,73 @@
+{
+	"title": "switch English, Belarusian, Russian",
+	"rules": [
+		{
+			"description": "Use option+1/2/3 to switch language to English,  Belarusian, Russian, respectively.",
+			"manipulators": [
+				{
+					"from": {
+						"key_code": "1",
+						"modifiers": {
+							"mandatory": [
+								"option"
+							],
+							"optional": [
+								"any"
+							]
+						}
+					},
+					"to": [
+						{
+							"select_input_source": {
+								"language": "en"
+							}
+						}
+					],
+					"type": "basic"
+				},
+				{
+					"from": {
+						"key_code": "2",
+						"modifiers": {
+							"mandatory": [
+								"option"
+							],
+							"optional": [
+								"any"
+							]
+						}
+					},
+					"to": [
+						{
+							"select_input_source": {
+								"language": "be"
+							}
+						}
+					],
+					"type": "basic"
+				},
+				{
+					"from": {
+						"key_code": "3",
+						"modifiers": {
+							"mandatory": [
+								"option"
+							],
+							"optional": [
+								"any"
+							]
+						}
+					},
+					"to": [
+						{
+							"select_input_source": {
+								"language": "ru"
+							}
+						}
+					],
+					"type": "basic"
+				}
+			]
+		}
+	]
+}

@@ -40,23 +40,6 @@
  '(mouse-wheel-progressive-speed nil)
  '(mouse-wheel-scroll-amount (quote (1 ((shift) . 5) ((control)))))
  '(ns-command-modifier (quote meta))
- '(package-archives
-   (quote
-    (("gnu" . "https://elpa.gnu.org/packages/")
-     ("melpa" . "https://melpa.org/packages/")
-     ("org" . "https://orgmode.org/elpa/")
-     ("melpa" . "https://melpa.org/packages/")
-     ("org" . "https://orgmode.org/elpa/")
-     ("melpa" . "https://melpa.org/packages/")
-     ("org" . "https://orgmode.org/elpa/")
-     ("melpa" . "https://melpa.org/packages/")
-     ("org" . "https://orgmode.org/elpa/")
-     ("melpa" . "https://melpa.org/packages/")
-     ("org" . "https://orgmode.org/elpa/")
-     ("melpa" . "https://melpa.org/packages/")
-     ("org" . "https://orgmode.org/elpa/")
-     ("melpa" . "https://melpa.org/packages/")
-     ("org" . "https://orgmode.org/elpa/"))))
  '(package-enable-at-startup nil)
  '(package-selected-packages
    (quote
@@ -91,11 +74,7 @@
 (customize-set-variable 'package-archives
                         `(,@package-archives
                           ("melpa" . "https://melpa.org/packages/")
-                          ;; ("marmalade" . "https://marmalade-repo.org/packages/")
                           ("org" . "https://orgmode.org/elpa/")
-                          ;; ("user42" . "https://download.tuxfamily.org/user42/elpa/packages/")
-                          ;; ("emacswiki" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/emacswiki/")
-                          ;; ("sunrise" . "http://joseito.republika.pl/sunrise-commander/")
                           ))
 (customize-set-variable 'package-enable-at-startup nil)
 (package-initialize)
@@ -360,21 +339,6 @@
   (lor-theme :repo "a13/lor-theme" :fetcher github :version original))
 
 (global-unset-key (kbd "C-x ."))
-(global-set-key (kbd "C-x .") 'next-buffer)
-(global-set-key (kbd "C-x ,") 'previous-buffer)
-
-(use-package so-long
-  :quelpa (so-long :url "https://raw.githubusercontent.com/emacs-mirror/emacs/master/lisp/so-long.el" :fetcher url)
-  :config (global-so-long-mode))
-
-(use-package lor-theme
-  :config
-  (load-theme 'lor t)
-  :quelpa
-  (lor-theme :repo "a13/lor-theme" :fetcher github :version original))
-
-(global-unset-key (kbd "C-x ."))
-(global-unset-key (kbd "M-s")
 (global-set-key (kbd "C-x .") 'next-buffer)
 (global-set-key (kbd "C-x ,") 'previous-buffer)
 

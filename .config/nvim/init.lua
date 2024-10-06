@@ -212,3 +212,6 @@ vim.api.nvim_set_keymap("n", "<A-Right>", ":bnext<CR>", { noremap = true, silent
 -- Маппинг для просмотра буферов
 vim.api.nvim_set_keymap("n", "<leader>bb", ":Telescope buffers<CR>", { noremap = true, silent = true })
 
+-- Маппинг для отображения списка последних открытых файлов с помощью Telescope
+vim.api.nvim_set_keymap("n", "<leader>rf", ":Telescope oldfiles<CR>", { noremap = true, silent = true })
+

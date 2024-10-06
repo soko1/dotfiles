@@ -86,8 +86,44 @@ _G.search_related_notes = search_related_notes
 -- Маппинг для поиска связанных заметок
 vim.api.nvim_set_keymap("n", "<leader>or", ":lua search_related_notes()<CR>", { noremap = true, silent = true })
 
--- Маппинг для поиска по всем файлам в каталоге Obsidian через Telescope
-vim.api.nvim_set_keymap("n", "<leader>of", ":lua require('telescope.builtin').find_files({ cwd = '~/git/myspace' })<CR>", { noremap = true, silent = true })
+-- Функция для сортировки файлов по времени доступа
+local function find_files_sorted_by_access_time()
+    local base_dir = '~/git/myspace'
+    local files = vim.fn.glob(base_dir .. '/**/*', true, true)
+    table.sort(files, function(a, b)
+        return vim.fn.getftime(b) < vim.fn.getftime(a) -- Сортируем по времени доступа
+    end)
+
+    -- Убираем начальный путь, оставляя только относительные пути
+    for i, file in ipairs(files) do
+        files[i] = vim.fn.fnamemodify(file, ":~" .. base_dir)
+    end
+
+    require('telescope.pickers').new({}, {
+        prompt_title = "Часто используемые файлы",
+        finder = require('telescope.finders').new_table {
+            results = files,
+        },
+        sorter = require('telescope.sorters').get_fuzzy_file(),
+        attach_mappings = function(_, map)
+            map('i', '<CR>', function(bufnr)
+                local selection = require('telescope.actions.state').get_selected_entry(bufnr)
+                if selection then
+                    -- Открываем файл с использованием edit!
+                    vim.cmd('edit! ' .. base_dir .. selection.value)
+                end
+            end)
+            return true
+        end,
+    }):find()
+end
+
+
+-- Помещаем функцию в глобальную область видимости
+_G.find_files_sorted_by_access_time = find_files_sorted_by_access_time
+
+-- Маппинг для поиска файлов, отсортированных по времени доступа
+vim.api.nvim_set_keymap("n", "<leader>of", ":lua find_files_sorted_by_access_time()<CR>", { noremap = true, silent = true })
 
 -- Функция для создания новой заметки с выбором шаблона
 local function create_note_from_template()
@@ -156,5 +192,6 @@ vim.api.nvim_set_keymap("n", "<A-Left>", ":bprevious<CR>", { noremap = true, sil
 -- Переключение на следующий буфер с Alt + Right
 vim.api.nvim_set_keymap("n", "<A-Right>", ":bnext<CR>", { noremap = true, silent = true })
 
-
+-- Маппинг для просмотра буферов
 vim.api.nvim_set_keymap("n", "<leader>bb", ":Telescope buffers<CR>", { noremap = true, silent = true })
+

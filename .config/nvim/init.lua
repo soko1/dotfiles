@@ -31,13 +31,13 @@ require("lazy").setup({
       "hrsh7th/nvim-cmp", -- добавляем nvim-cmp как зависимость
     },
     opts = {
-      dir = "~/git/myspace", -- обновленный путь к твоему vault
-      ui = {
-          enable = true, -- включить UI функции
-      },
+      dir = "~/git/myspace", -- путь к твоему vault
       completion = {
         nvim_cmp = true, -- включить автодополнение через nvim-cmp
       },
+    attachments = {
+            img_folder = "files/", -- изменить директорию для сохранения изображений
+        },
     },
   },
 
@@ -71,137 +71,31 @@ cmp.setup({
   },
 })
 
--- Функция для поиска связанных заметок
-local function search_related_notes()
-    local current_file = vim.fn.fnamemodify(vim.fn.expand('%:t'), ':r') -- Получаем имя текущего файла без расширения
-    require('telescope.builtin').live_grep({
-        cwd = '~/git/myspace', -- обновленный путь к вашему vault
-        default_text = current_file -- Заполняем поле ввода именем текущей заметки без расширения
-    })
-end
+-- Маппинги для obsidian.nvim
 
--- Помещаем функцию в глобальную область видимости
-_G.search_related_notes = search_related_notes
+-- Открытие заметки в приложении Obsidian
+vim.api.nvim_set_keymap("n", "<leader>oo", ":ObsidianOpen<CR>", { noremap = true, silent = true })
 
--- Маппинг для поиска связанных заметок
-vim.api.nvim_set_keymap("n", "<leader>or", ":lua search_related_notes()<CR>", { noremap = true, silent = true })
+-- Быстрая навигация между заметками
+vim.api.nvim_set_keymap("n", "<leader>oq", ":ObsidianQuickSwitch<CR>", { noremap = true, silent = true })
 
--- Функция для сортировки файлов по времени доступа
-local function find_files_sorted_by_access_time()
-    local base_dir = vim.fn.expand('~/git/myspace')
-    local files = vim.fn.glob(base_dir .. '/**/*', true, true)
+-- Следование за ссылкой под курсором
+vim.api.nvim_set_keymap("n", "<leader>ol", ":ObsidianFollowLink<CR>", { noremap = true, silent = true })
 
-    -- Фильтруем только файлы
-    files = vim.tbl_filter(function(file)
-        return vim.fn.isdirectory(file) == 0 -- Возвращаем только файлы, игнорируя каталоги
-    end, files)
+-- Создание новой заметки
+vim.api.nvim_set_keymap("n", "<leader>on", ":ObsidianNew<CR>", { noremap = true, silent = true })
 
-    table.sort(files, function(a, b)
-        return vim.fn.getftime(b) < vim.fn.getftime(a) -- Сортируем по времени доступа
-    end)
+-- Просмотр обратных ссылок на текущую заметку
+vim.api.nvim_set_keymap("n", "<leader>ob", ":ObsidianBacklinks<CR>", { noremap = true, silent = true })
 
-    -- Убираем путь до myspace
-    for i, file in ipairs(files) do
-        files[i] = file:gsub(base_dir .. '/', '') -- Убираем базовую часть пути
-    end
+-- Вставка изображения из буфера обмена
+vim.api.nvim_set_keymap("n", "<leader>oi", ":ObsidianPasteImg<CR>", { noremap = true, silent = true })
 
-    require('telescope.pickers').new({}, {
-        prompt_title = "Часто используемые файлы",
-        finder = require('telescope.finders').new_table {
-            results = files,
-        },
-        sorter = require('telescope.sorters').get_fuzzy_file(),
-        attach_mappings = function(_, map)
-            map('i', '<CR>', function(bufnr)
-                local selection = require('telescope.actions.state').get_selected_entry(bufnr)
-                if selection then
-                    -- Открываем файл с использованием edit!
-                    vim.cmd('edit! ' .. base_dir .. '/' .. selection.value)
-                end
-            end)
-            return true
-        end,
-    }):find()
-end
+-- Использование шаблона для создания новой заметки
+vim.api.nvim_set_keymap("n", "<leader>ot", ":ObsidianNewFromTemplate<CR>", { noremap = true, silent = true })
 
-
--- Помещаем функцию в глобальную область видимости
-_G.find_files_sorted_by_access_time = find_files_sorted_by_access_time
-
--- Маппинг для поиска файлов, отсортированных по времени доступа
-vim.api.nvim_set_keymap("n", "<leader>of", ":lua find_files_sorted_by_access_time()<CR>", { noremap = true, silent = true })
-
--- Функция для создания новой заметки с выбором шаблона
-local function create_note_from_template()
-    -- Выбор шаблона
-    require('telescope.builtin').find_files({
-        cwd = '~/git/myspace/templates', -- путь к папке с шаблонами
-        attach_mappings = function(prompt_bufnr, map)
-            local actions = require('telescope.actions')
-            -- Определяем действие при выборе шаблона
-            map('i', '<CR>', function()
-                local selection = require('telescope.actions.state').get_selected_entry()
-                actions.close(prompt_bufnr) -- Закрываем окно выбора
-
-                -- Запрашиваем название новой заметки
-                vim.ui.input({ prompt = 'Введите название для новой заметки: ' }, function(input)
-                    if input and input ~= '' then
-                        -- Проверяем, в какую директорию сохранять
-                        local new_note_path
-                        if selection.value == "my_therapy.md" or selection.value == "daily.md" then
-                            -- Получаем текущую дату в формате YYYY-MM-DD
-                            local date = os.date("%Y-%m-%d")
-                            -- Формируем полный путь к новой заметке в папке daily
-                            local note_name = date .. ' ' .. input .. '.md' -- Формируем имя с датой
-                            new_note_path = vim.fn.expand('~/git/myspace/daily/' .. note_name) -- Путь к директории daily
-                        else
-                            -- Формируем полный путь к новой заметке в папке base
-                            local note_name = input .. '.md' -- Имя заметки
-                            new_note_path = vim.fn.expand('~/git/myspace/base/' .. note_name) -- Путь к директории base
-                        end
-
-                        -- Проверяем, существует ли файл
-                        if vim.fn.filereadable(new_note_path) == 1 then
-                            -- Если файл существует, просто открываем его
-                            vim.cmd('edit ' .. new_note_path)
-                            print('Открыта существующая заметка: ' .. new_note_path)
-                        else
-                            -- Получаем полный путь к шаблону
-                            local template_path = selection.path or selection.value
-
-                            -- Читаем шаблон и создаем новую заметку
-                            local template_content = vim.fn.readfile(template_path)
-
-                            -- Проверяем, существует ли директория
-                            local dir_path = vim.fn.fnamemodify(new_note_path, ':h') -- Получаем путь к директории
-                            if vim.fn.isdirectory(dir_path) == 0 then
-                                vim.fn.mkdir(dir_path, "p") -- Создаем директорию, если она не существует
-                            end
-
-                            -- Записываем содержимое шаблона в новую заметку
-                            vim.fn.writefile(template_content, new_note_path)
-
-                            -- Открываем новую заметку в буфере
-                            vim.cmd('edit ' .. new_note_path)
-
-                            print('Создана новая заметка: ' .. new_note_path)
-                        end
-                    else
-                        print('Название заметки не может быть пустым.')
-                    end
-                end)
-            end)
-            return true
-        end,
-    })
-end
-
-
--- Помещаем функцию в глобальную область видимости
-_G.create_note_from_template = create_note_from_template
-
--- Маппинг для создания новой заметки с выбором шаблона
-vim.api.nvim_set_keymap("n", "<leader>on", ":lua create_note_from_template()<CR>", { noremap = true, silent = true })
+-- Список тегов в заметке
+vim.api.nvim_set_keymap("n", "<leader>otag", ":ObsidianTags<CR>", { noremap = true, silent = true })
 
 -- Переключение на предыдущий буфер с Alt + Left
 vim.api.nvim_set_keymap("n", "<A-Left>", ":bprevious<CR>", { noremap = true, silent = true })
@@ -215,3 +109,5 @@ vim.api.nvim_set_keymap("n", "<leader>bb", ":Telescope buffers<CR>", { noremap =
 -- Маппинг для отображения списка последних открытых файлов с помощью Telescope
 vim.api.nvim_set_keymap("n", "<leader>rf", ":Telescope oldfiles<CR>", { noremap = true, silent = true })
 
+-- Поиск или создание заметки
+vim.api.nvim_set_keymap("n", "<leader>os", ":ObsidianSearch<CR>", { noremap = true, silent = true })

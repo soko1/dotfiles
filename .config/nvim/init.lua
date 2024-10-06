@@ -143,12 +143,22 @@ local function create_note_from_template()
                 local selection = require('telescope.actions.state').get_selected_entry()
                 actions.close(prompt_bufnr) -- Закрываем окно выбора
 
-                -- Запрашиваем имя новой заметки
-                vim.ui.input({ prompt = 'Введите имя для новой заметки: ' }, function(input)
+                -- Запрашиваем название новой заметки
+                vim.ui.input({ prompt = 'Введите название для новой заметки: ' }, function(input)
                     if input and input ~= '' then
-                        -- Формируем полный путь к новой заметке в папке base
-                        local note_name = input .. '.md' -- Добавляем расширение .md
-                        local new_note_path = vim.fn.expand('~/git/myspace/base/' .. note_name) -- Обновляем путь к папке base
+                        -- Проверяем, в какую директорию сохранять
+                        local new_note_path
+                        if selection.value == "my_therapy.md" or selection.value == "daily.md" then
+                            -- Получаем текущую дату в формате YYYY-MM-DD
+                            local date = os.date("%Y-%m-%d")
+                            -- Формируем полный путь к новой заметке в папке daily
+                            local note_name = date .. ' ' .. input .. '.md' -- Формируем имя с датой
+                            new_note_path = vim.fn.expand('~/git/myspace/daily/' .. note_name) -- Путь к директории daily
+                        else
+                            -- Формируем полный путь к новой заметке в папке base
+                            local note_name = input .. '.md' -- Имя заметки
+                            new_note_path = vim.fn.expand('~/git/myspace/base/' .. note_name) -- Путь к директории base
+                        end
 
                         -- Проверяем, существует ли файл
                         if vim.fn.filereadable(new_note_path) == 1 then
@@ -177,7 +187,7 @@ local function create_note_from_template()
                             print('Создана новая заметка: ' .. new_note_path)
                         end
                     else
-                        print('Имя заметки не может быть пустым.')
+                        print('Название заметки не может быть пустым.')
                     end
                 end)
             end)
@@ -185,6 +195,7 @@ local function create_note_from_template()
         end,
     })
 end
+
 
 -- Помещаем функцию в глобальную область видимости
 _G.create_note_from_template = create_note_from_template

@@ -88,15 +88,21 @@ vim.api.nvim_set_keymap("n", "<leader>or", ":lua search_related_notes()<CR>", { 
 
 -- Функция для сортировки файлов по времени доступа
 local function find_files_sorted_by_access_time()
-    local base_dir = '~/git/myspace'
+    local base_dir = vim.fn.expand('~/git/myspace')
     local files = vim.fn.glob(base_dir .. '/**/*', true, true)
+
+    -- Фильтруем только файлы
+    files = vim.tbl_filter(function(file)
+        return vim.fn.isdirectory(file) == 0 -- Возвращаем только файлы, игнорируя каталоги
+    end, files)
+
     table.sort(files, function(a, b)
         return vim.fn.getftime(b) < vim.fn.getftime(a) -- Сортируем по времени доступа
     end)
 
-    -- Убираем начальный путь, оставляя только относительные пути
+    -- Убираем путь до myspace
     for i, file in ipairs(files) do
-        files[i] = vim.fn.fnamemodify(file, ":~" .. base_dir)
+        files[i] = file:gsub(base_dir .. '/', '') -- Убираем базовую часть пути
     end
 
     require('telescope.pickers').new({}, {
@@ -110,7 +116,7 @@ local function find_files_sorted_by_access_time()
                 local selection = require('telescope.actions.state').get_selected_entry(bufnr)
                 if selection then
                     -- Открываем файл с использованием edit!
-                    vim.cmd('edit! ' .. base_dir .. selection.value)
+                    vim.cmd('edit! ' .. base_dir .. '/' .. selection.value)
                 end
             end)
             return true

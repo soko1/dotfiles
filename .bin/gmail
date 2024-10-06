@@ -1,3 +1,0 @@
-#!/bin/sh
-
-xhost +local: && sudo -H -u gmail chromium-browser

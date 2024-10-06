@@ -1,5 +1,0 @@
-#!/bin/sh
-
-xkb-switch -s "by(latin)"
-i3lock
-xkb

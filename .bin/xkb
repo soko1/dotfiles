@@ -1,2 +1,0 @@
-#!/bin/sh
-setxkbmap -layout 'us,by,ru' -option 'grp:caps_toggle'

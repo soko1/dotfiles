@@ -84,10 +84,10 @@ end
 _G.search_related_notes = search_related_notes
 
 -- Маппинг для поиска связанных заметок
-vim.api.nvim_set_keymap("n", "<leader>sr", ":lua search_related_notes()<CR>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("n", "<leader>or", ":lua search_related_notes()<CR>", { noremap = true, silent = true })
 
 -- Маппинг для поиска по всем файлам в каталоге Obsidian через Telescope
-vim.api.nvim_set_keymap("n", "<leader>sf", ":lua require('telescope.builtin').find_files({ cwd = '~/git/myspace' })<CR>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("n", "<leader>of", ":lua require('telescope.builtin').find_files({ cwd = '~/git/myspace' })<CR>", { noremap = true, silent = true })
 
 -- Функция для создания новой заметки с выбором шаблона
 local function create_note_from_template()
@@ -148,7 +148,7 @@ end
 _G.create_note_from_template = create_note_from_template
 
 -- Маппинг для создания новой заметки с выбором шаблона
-vim.api.nvim_set_keymap("n", "<leader>nn", ":lua create_note_from_template()<CR>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("n", "<leader>on", ":lua create_note_from_template()<CR>", { noremap = true, silent = true })
 
 -- Переключение на предыдущий буфер с Alt + Left
 vim.api.nvim_set_keymap("n", "<A-Left>", ":bprevious<CR>", { noremap = true, silent = true })

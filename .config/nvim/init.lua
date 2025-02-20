@@ -38,6 +38,9 @@ require("lazy").setup({
     attachments = {
             img_folder = "files/", -- изменить директорию для сохранения изображений
         },
+    new_note = {
+            use_filename_as_title = true, -- используем имя файла как заголовок заметки
+        },
     },
   },
 
@@ -50,8 +53,8 @@ require("lazy").setup({
 })
 
 -- Основные настройки Neovim
-vim.opt.number = true          -- Нумерация строк
-vim.opt.relativenumber = true  -- Относительная нумерация
+vim.opt.number = false          -- Нумерация строк
+vim.opt.relativenumber = false  -- Относительная нумерация
 vim.opt.expandtab = true       -- Преобразование табов в пробелы
 vim.opt.shiftwidth = 2         -- Ширина табуляции в пробелах
 vim.opt.tabstop = 2            -- Количество пробелов на место табуляции
